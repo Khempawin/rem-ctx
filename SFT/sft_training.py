@@ -36,7 +36,7 @@ training_args = SFTConfig(
 )
 
 trainer = SFTTrainer(
-    "Qwen/Qwen3-8B",
+    model,
     train_dataset=dataset,
     args=training_args
 )
