@@ -36,3 +36,14 @@ uv pip install datasets
 uv pip install wandb
 uv pip install flash-attn --no-build-isolation
 ```
+
+# Setup compute environment for Dataset Creation
+```
+conda create -n remorx-dataset python=3.12 
+conda activate remorx-dataset
+
+pip install uv
+
+uv pip install grobid-client-python pandas pyarrow beautifulsoup4
+uv pip install transformers lxml
+```
