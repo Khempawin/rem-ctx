@@ -22,9 +22,9 @@ model.gradient_checkpointing_enable()
 training_args = SFTConfig(
     output_dir="saves/REMORX-Qwen3-SFT",
     run_name="REMORX-Qwen3-SFT",
-    per_device_train_batch_size=4,
-    per_device_eval_batch_size=4,
-    gradient_accumulation_steps=1,
+    per_device_train_batch_size=1,
+    per_device_eval_batch_size=1,
+    gradient_accumulation_steps=4,
     lr_scheduler_type="cosine",
     learning_rate=1.0e-4,
     logging_steps=1,
