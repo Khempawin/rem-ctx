@@ -24,7 +24,6 @@ training_args = SFTConfig(
     learning_rate=1.0e-4,
     logging_steps=1,
     max_length=32768,
-    output_dir="tmp",
     num_train_epochs=3,
     report_to="none",
     gradient_checkpointing=True,
