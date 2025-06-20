@@ -16,6 +16,7 @@ uv pip install trl
 uv pip install git+https://github.com/huggingface/transformers.git@main
 uv pip install git+https://github.com/huggingface/accelerate.git@main
 uv pip install wandb
+uv pip install flash-attn --no-build-isolation
 ```
 
 ## Unsloth
@@ -31,4 +32,5 @@ uv pip install trl
 uv pip install unsloth
 uv pip install datasets
 uv pip install wandb
+uv pip install flash-attn --no-build-isolation
 ```
