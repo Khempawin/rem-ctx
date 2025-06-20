@@ -7,6 +7,8 @@
 conda create -n remorx python=3.12 
 conda activate remorx
 
+conda install mpi4py
+
 pip install uv
 
 uv pip install vllm --torch-backend=auto
