@@ -30,7 +30,7 @@ training_args = SFTConfig(
     logging_steps=1,
     max_length=32768,
     num_train_epochs=3,
-    report_to="none",
+    report_to="wandb",
     gradient_checkpointing=True,
     eos_token=tokenizer.eos_token,
 )
