@@ -6,6 +6,9 @@ from trl import SFTConfig, SFTTrainer
 
 dataset = load_dataset("pawin205/iclr-2017-2020-peer-review-with-thinking-trace", split="90thPercentile")
 
+dataset = dataset.remove_columns("prompt")
+dataset = dataset.rename_column("conversations", "messages")
+
 model = Qwen3ForCausalLM.from_pretrained(
     "Qwen/Qwen3-8B",
     torch_dtype=torch.bfloat16,
