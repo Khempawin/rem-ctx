@@ -1,13 +1,15 @@
 import torch
 
 from datasets import load_dataset
-from transformers import Qwen3ForCausalLM
+from transformers import Qwen3ForCausalLM, AutoTokenizer
 from trl import SFTConfig, SFTTrainer
 
 dataset = load_dataset("pawin205/iclr-2017-2020-peer-review-with-thinking-trace", split="90thPercentile")
 
 dataset = dataset.remove_columns("prompt")
 dataset = dataset.rename_column("conversations", "messages")
+
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-8B")
 
 model = Qwen3ForCausalLM.from_pretrained(
     "Qwen/Qwen3-8B",
@@ -30,8 +32,7 @@ training_args = SFTConfig(
     num_train_epochs=3,
     report_to="none",
     gradient_checkpointing=True,
-    eos_token="<|im_end|>",
-    deepspeed=""
+    eos_token=tokenizer.eos_token,
 )
 
 trainer = SFTTrainer(
