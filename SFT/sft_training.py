@@ -30,6 +30,7 @@ training_args = SFTConfig(
     num_train_epochs=3,
     report_to="none",
     gradient_checkpointing=True,
+    eos_token="<|im_end|>",
     deepspeed=""
 )
 
