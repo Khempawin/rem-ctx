@@ -21,3 +21,30 @@
 # Get other metadata from existing dataset from huggingface
 
 # Select Data records to be used
+
+# ACL 2017 dataset
+# Get Article names for each PDF files
+python -m remorx_dataset.create_from_pdf_dir \
+    --config config.json \
+    --input-pdf-dir data/acl_2017_pdfs \
+    --output data/processed/acl2017_processed.parquet \
+    --source ACL \
+    --year 2017
+    
+# ACL 2024 dataset
+# Get Article names for each PDF files
+python -m remorx_dataset.create_from_pdf_dir \
+    --config config.json \
+    --input-pdf-dir data/acl_2024_pdfs \
+    --output data/processed/acl2024_processed.parquet \
+    --source ACL \
+    --year 2024
+
+# NeurIPS 2019 dataset
+# Get Article names for each PDF files
+python -m remorx_dataset.create_from_pdf_dir \
+    --config config.json \
+    --input-pdf-dir data/neurips_2019_pdfs \
+    --output data/processed/neurips_2019_processed.parquet \
+    --source NeurIPS \
+    --year 2019

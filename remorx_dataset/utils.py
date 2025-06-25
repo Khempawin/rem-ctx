@@ -158,8 +158,13 @@ def add_details_from_pdf(
     tokenizer: BertTokenizerFast,
     pdf_base_dir: str,
     source: Literal["TPR", "ICLR", "ACL", "NeurIPS"],
+    year: Optional[int]=None
     ) -> Article:
+    
     record["source"] = source
+    
+    if year:
+        record["year"] = year
     
     # Check if pdf file exist
     full_pdf_file_path = "{base_dir}/{pdf_path}".format(
