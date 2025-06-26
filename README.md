@@ -45,8 +45,8 @@ conda activate remorx-dataset
 pip install uv
 
 uv add grobid-client-python pandas pyarrow beautifulsoup4
-uv add transformers lxml openpyxl
+uv add transformers lxml openpyxl datasets
 
 Optional for interactive notebooks
-uv add ipykernel
+uv add ipykernel ipywidgets
 ```

@@ -13,3 +13,9 @@ dependencies = [
     "pyarrow>=20.0.0",
     "transformers>=4.52.4",
 ]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.7",
+]
