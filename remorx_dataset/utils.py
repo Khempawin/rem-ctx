@@ -1,9 +1,12 @@
 import pandas as pd
+import numpy as np
 
+from pathlib import Path
+from itertools import chain
+from typing import Callable
 from typing import TypedDict, Optional, Literal
 from bs4 import BeautifulSoup
 from transformers.models.bert.tokenization_bert_fast import BertTokenizerFast
-from pathlib import Path
 
 from grobid_client.grobid_client import GrobidClient
 from remorx_dataset.doc2json.grobid2json.tei_to_json import convert_tei_xml_soup_to_s2orc_json
@@ -195,3 +198,30 @@ def add_details_from_pdf(
     return record
 
 
+def select_samples_for_each_group(articles: list[Article], group_id_func: Callable[[Article], str],samples_per_group: int) -> pd.DataFrame:
+    
+    groups_dict = dict()
+
+    for article in articles:
+        group_id = group_id_func(article)
+        group = groups_dict.get(group_id, list())
+        group.append(article)
+        groups_dict[group_id] = group
+        
+    # Select samples for each group
+    groups = [np.random.choice(v, size=samples_per_group, replace=False) for k, v in groups_dict.items()]
+
+    flattened_list = list(chain.from_iterable(groups))
+    
+    return pd.DataFrame(flattened_list)
+
+
+def get_iclr_group_id(article: Article) -> str:
+    return "{venue}-{year}".format(venue="ICLR", year=article["year"])
+
+
+def get_tpr_group_id(article: Article) -> str:
+    return "{major_discipline}-{minor_discipline}".format(
+        major_discipline=article["major_discipline"],
+        minor_discipline=article["minor_discipline"]
+    )
