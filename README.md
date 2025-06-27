@@ -46,6 +46,7 @@ pip install uv
 
 uv add grobid-client-python pandas pyarrow beautifulsoup4
 uv add transformers lxml openpyxl datasets
+uv add anthropic[bedrock] ratelimit
 
 Optional for interactive notebooks
 uv add ipykernel ipywidgets
