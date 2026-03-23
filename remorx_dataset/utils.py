@@ -23,6 +23,7 @@ class Article(TypedDict):
     pdf_file_path: str
     figure_details: Optional[str]
     novelty_assessment: Optional[str]
+    list_of_reference: Optional[list[str]]
     prompt: Optional[str]
     full_text_length: Optional[int]
 
@@ -160,12 +161,13 @@ def add_details_from_pdf(
     client: GrobidClient, 
     tokenizer: BertTokenizerFast,
     pdf_base_dir: str,
-    source: Literal["TPR", "ICLR", "ACL", "NeurIPS"],
+    source: Optional[Literal["TPR", "ICLR", "ACL", "NeurIPS"]]=None,
     year: Optional[int]=None
     ) -> Article:
-    
-    record["source"] = source
-    
+
+    if source:    
+        record["source"] = source
+        
     if year:
         record["year"] = year
     
@@ -191,6 +193,7 @@ def add_details_from_pdf(
     
     record["abstract"] = pdf_article_content["abstract"]
     record["full_text"] = pdf_article_content["organized_text"]
+    record["list_of_reference"] = pdf_article_content['list_of_reference']
     
     # Get full_text_length
     record['full_text_length'] = get_tokenized_length(record["full_text"], tokenizer)
