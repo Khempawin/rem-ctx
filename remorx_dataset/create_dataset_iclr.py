@@ -1,15 +1,14 @@
 import pandas as pd
-import numpy as np
 
-from pathlib import Path
-from itertools import chain
-from typing import Callable
 from typing import TypedDict, Optional, Literal
 from bs4 import BeautifulSoup
+from transformers import AutoTokenizer
 from transformers.models.bert.tokenization_bert_fast import BertTokenizerFast
+from tqdm import tqdm
+from pathlib import Path
 
 from grobid_client.grobid_client import GrobidClient
-from remorx_dataset.doc2json.grobid2json.tei_to_json import convert_tei_xml_soup_to_s2orc_json
+from doc2json.grobid2json.tei_to_json import convert_tei_xml_soup_to_s2orc_json
 
 
 class Article(TypedDict):
@@ -23,7 +22,6 @@ class Article(TypedDict):
     pdf_file_path: str
     figure_details: Optional[str]
     novelty_assessment: Optional[str]
-    list_of_reference: Optional[list[str]]
     prompt: Optional[str]
     full_text_length: Optional[int]
 
@@ -156,44 +154,20 @@ def get_tokenized_length(message: str, tokenizer: BertTokenizerFast):
     return len(tokenizer(message)["input_ids"])
 
 
-def add_details_from_pdf(
-    record: Article, 
-    client: GrobidClient, 
-    tokenizer: BertTokenizerFast,
-    pdf_base_dir: str,
-    source: Optional[Literal["TPR", "ICLR", "ACL", "NeurIPS"]]=None,
-    year: Optional[int]=None
-    ) -> Article:
-
-    if source:    
-        record["source"] = source
-        
-    if year:
-        record["year"] = year
-    
-    # Check if pdf file exist
-    full_pdf_file_path = "{base_dir}/{pdf_path}".format(
-        base_dir=pdf_base_dir,
-        pdf_path=record["pdf_file_path"]
-    ) if pdf_base_dir else record["pdf_file_path"]
-    
-    if (not Path(full_pdf_file_path).exists()):
-        return record
-    
+def process_record(record: Article, client: GrobidClient, tokenizer: BertTokenizerFast) -> Article:
     # Process PDF to get full_text
     try:
-        pdf_article_content = parse_article_pdf_file(full_pdf_file_path, client)
+        pdf_article_content = parse_article_pdf_file(record["pdf_file_path"], client)
     except Exception as e:
-        print("Error processing: {}".format(full_pdf_file_path))
+        print("Error processing: {}".format(record["pdf_file_path"]))
         return record
-    
+
     # Add title if missing
     if not record["title"]:
         record["title"] = pdf_article_content["title"]
-    
+
     record["abstract"] = pdf_article_content["abstract"]
     record["full_text"] = pdf_article_content["organized_text"]
-    record["list_of_reference"] = pdf_article_content['list_of_reference']
     
     # Get full_text_length
     record['full_text_length'] = get_tokenized_length(record["full_text"], tokenizer)
@@ -201,30 +175,36 @@ def add_details_from_pdf(
     return record
 
 
-def select_samples_for_each_group(articles: list[Article], group_id_func: Callable[[Article], str],samples_per_group: int) -> pd.DataFrame:
+def main():
+    # Create client for Grobid
+    client = GrobidClient(config_path="./config.json")
     
-    groups_dict = dict()
+    # List all ICLR pdf files
+    iclr_pdf_dir = Path("iclr_pdfs")
+    iclr_records = [Article(
+        title="",
+        abstract=None,
+        major_discipline=None,
+        minor_discipline=None,
+        source="ICLR",
+        year=None,
+        full_text=None,
+        pdf_file_path=str(entry),
+        figure_details=None,
+        novelty_assessment=None,
+        prompt=None,
+        full_text_length=None
+        ) for entry in iclr_pdf_dir.glob("*.pdf")]
 
-    for article in articles:
-        group_id = group_id_func(article)
-        group = groups_dict.get(group_id, list())
-        group.append(article)
-        groups_dict[group_id] = group
-        
-    # Select samples for each group
-    groups = [np.random.choice(v, size=samples_per_group, replace=False) for k, v in groups_dict.items()]
-
-    flattened_list = list(chain.from_iterable(groups))
+    # load tokenizer (same for all models handled here)
+    tokenizer = AutoTokenizer.from_pretrained('google-bert/bert-base-uncased')
     
-    return pd.DataFrame(flattened_list)
+    # Process each ICLR article
+    processed_records = [process_record(record, client, tokenizer) for record in tqdm(iclr_records)]
+    
+    # Save records to parquet file
+    pd.DataFrame(processed_records).to_parquet("iclr_processed.parquet", engine="pyarrow", index=False)
 
 
-def get_iclr_group_id(article: Article) -> str:
-    return "{venue}-{year}".format(venue="ICLR", year=article["year"])
-
-
-def get_tpr_group_id(article: Article) -> str:
-    return "{major_discipline}-{minor_discipline}".format(
-        major_discipline=article["major_discipline"],
-        minor_discipline=article["minor_discipline"]
-    )
+if __name__ == "__main__":
+    main()
