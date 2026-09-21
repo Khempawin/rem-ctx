@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Interactive GitHub Pages demo for REM-CTX: automated peer review via reinforcement learning with auxiliary context."
+    >
+    <title>REM-CTX Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="REM-CTX home">
+        <span class="brand-mark">R</span>
+        <span>REM-CTX</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#method">Method</a>
+        <a href="#demo">Demo</a>
+        <a href="#results">Results</a>
+        <a href="https://arxiv.org/abs/2604.00248">Paper</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">arXiv:2604.00248</p>
+          <h1>REM-CTX</h1>
+          <p class="subtitle">
+            Automated peer review via reinforcement learning with auxiliary context.
+          </p>
+          <p>
+            REM-CTX trains an 8B-parameter review model with GRPO and rewards that
+            encourage generated reviews to use manuscript figures and external novelty
+            assessments accurately.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#demo">Try the demo</a>
+            <a class="button secondary" href="https://arxiv.org/html/2604.00248">Read HTML paper</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="REM-CTX pipeline illustration">
+          <img src="./assets/rem-ctx-flow.svg" alt="REM-CTX pipeline from manuscript to auxiliary context, reward functions, GRPO training, and grounded review output.">
+        </div>
+      </section>
+
+      <section id="method" class="band">
+        <div class="section-heading">
+          <p class="eyebrow">Core idea</p>
+          <h2>Reward reviews for using the context they were given.</h2>
+        </div>
+        <div class="method-grid">
+          <article>
+            <span class="metric">01</span>
+            <h3>Auxiliary contexts</h3>
+            <p>
+              The model receives manuscript text plus figure descriptions and novelty
+              assessments produced from external scholarly signals.
+            </p>
+          </article>
+          <article>
+            <span class="metric">02</span>
+            <h3>Correspondence rewards</h3>
+            <p>
+              FCRF and NCRF score whether review sentences that discuss the auxiliary
+              context are relevant and consistent with it.
+            </p>
+          </article>
+          <article>
+            <span class="metric">03</span>
+            <h3>Multi-objective GRPO</h3>
+            <p>
+              Training combines quality coverage, figure correspondence, novelty
+              correspondence, and a structured reasoning format reward.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="demo" class="demo-shell" aria-labelledby="demo-heading">
+        <div class="section-heading compact">
+          <p class="eyebrow">Static Pages demo</p>
+          <h2 id="demo-heading">Explore how auxiliary context changes a review.</h2>
+        </div>
+
+        <div class="demo-layout">
+          <form class="demo-controls" id="review-form">
+            <label>
+              Manuscript summary
+              <textarea id="paper-summary" rows="6">We introduce a transformer model for scientific claim verification. The paper evaluates on three benchmark datasets and reports improvements in factual consistency, but the ablation section is brief.</textarea>
+            </label>
+            <label>
+              Figure context
+              <textarea id="figure-context" rows="5">Figure 2 shows the largest gain comes from the retrieval module. Figure 4 shows performance drops on biomedical claims with long evidence chains.</textarea>
+            </label>
+            <label>
+              Novelty context
+              <textarea id="novelty-context" rows="5">Similar retrieval-augmented verifiers exist, but this work combines claim decomposition with evidence calibration. The novelty is moderate and depends on the calibration analysis.</textarea>
+            </label>
+            <fieldset>
+              <legend>Reward emphasis</legend>
+              <label class="range-row">
+                Quality
+                <input id="quality-weight" type="range" min="0" max="100" value="80">
+              </label>
+              <label class="range-row">
+                Figure correspondence
+                <input id="figure-weight" type="range" min="0" max="100" value="70">
+              </label>
+              <label class="range-row">
+                Novelty correspondence
+                <input id="novelty-weight" type="range" min="0" max="100" value="75">
+              </label>
+            </fieldset>
+            <button class="button primary full" type="submit">Generate illustrative review</button>
+          </form>
+
+          <aside class="demo-output" aria-live="polite">
+            <div class="scoreboard">
+              <div>
+                <span id="score-quality">0.80</span>
+                <p>Quality</p>
+              </div>
+              <div>
+                <span id="score-figure">0.70</span>
+                <p>Figure</p>
+              </div>
+              <div>
+                <span id="score-novelty">0.75</span>
+                <p>Novelty</p>
+              </div>
+            </div>
+            <div class="review-card">
+              <p class="eyebrow">Generated review preview</p>
+              <div id="review-output"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="results" class="band results">
+        <div class="section-heading">
+          <p class="eyebrow">Findings from the paper</p>
+          <h2>REM-CTX improves overall review quality while exposing reward trade-offs.</h2>
+        </div>
+        <div class="result-grid">
+          <article>
+            <h3>Highest overall quality</h3>
+            <p>
+              Across six baselines, REM-CTX reports the strongest total aspect coverage
+              on manuscripts from computer, biological, and physical sciences.
+            </p>
+          </article>
+          <article>
+            <h3>Complementary rewards</h3>
+            <p>
+              Figure and novelty correspondence rewards selectively improve their
+              targeted grounding behavior, and the full model outperforms partial variants.
+            </p>
+          </article>
+          <article>
+            <h3>Interpretable tensions</h3>
+            <p>
+              Training dynamics show criticism can trade off against other metrics,
+              motivating future grouped or adaptive reward design.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Demo for <a href="https://arxiv.org/abs/2604.00248">REM-CTX: Automated Peer Review via Reinforcement Learning with Auxiliary Context</a>
+        by Pawin Taechoyotin and Daniel E. Acuna.
+      </p>
+      <p>This static demo is illustrative and does not run the trained REM-CTX model.</p>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

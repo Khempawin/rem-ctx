@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 760" role="img" aria-labelledby="title desc">
+  <title id="title">REM-CTX pipeline illustration</title>
+  <desc id="desc">A manuscript, figure details, and novelty context feed correspondence rewards and GRPO training to produce grounded peer reviews.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eef3ef"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#13211c" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f6f5b"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="760" rx="36" fill="#f7f6f1"/>
+  <g filter="url(#shadow)">
+    <rect x="70" y="68" width="980" height="624" rx="26" fill="url(#panel)" stroke="#d8ded7"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" fill="#17201d">
+    <text x="110" y="128" font-size="44" font-weight="800">REM-CTX review training loop</text>
+    <text x="112" y="164" font-size="20" fill="#56615d">Auxiliary context becomes an explicit reward signal.</text>
+  </g>
+  <g font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">
+    <rect x="112" y="230" width="220" height="118" rx="18" fill="#ffffff" stroke="#d8ded7"/>
+    <text x="140" y="276" fill="#17201d">Manuscript text</text>
+    <text x="140" y="306" fill="#56615d" font-size="15" font-weight="500">Full paper, title, abstract</text>
+    <path d="M145 326 h120" stroke="#1f6f5b" stroke-width="8" stroke-linecap="round"/>
+
+    <rect x="112" y="402" width="220" height="118" rx="18" fill="#ffffff" stroke="#d8ded7"/>
+    <text x="140" y="448" fill="#17201d">Figure details</text>
+    <text x="140" y="478" fill="#56615d" font-size="15" font-weight="500">Visual evidence as text</text>
+    <circle cx="154" cy="500" r="10" fill="#16808c"/>
+    <rect x="178" y="492" width="88" height="16" rx="8" fill="#16808c"/>
+
+    <rect x="112" y="574" width="220" height="70" rx="18" fill="#ffffff" stroke="#d8ded7"/>
+    <text x="140" y="616" fill="#17201d">Novelty signals</text>
+  </g>
+  <g stroke="#1f6f5b" stroke-width="5" fill="none" marker-end="url(#arrow)">
+    <path d="M332 289 C408 289 420 348 486 348"/>
+    <path d="M332 461 C408 461 420 388 486 388"/>
+    <path d="M332 610 C424 610 414 426 486 426"/>
+  </g>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="486" y="284" width="240" height="188" rx="24" fill="#1f6f5b"/>
+    <text x="526" y="344" fill="#ffffff" font-size="25" font-weight="800">Correspondence</text>
+    <text x="526" y="376" fill="#ffffff" font-size="25" font-weight="800">reward functions</text>
+    <text x="526" y="416" fill="#dcece5" font-size="16">FCRF + NCRF classify</text>
+    <text x="526" y="440" fill="#dcece5" font-size="16">relevance and consistency</text>
+  </g>
+  <path d="M726 378 H812" stroke="#1f6f5b" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="812" y="236" width="196" height="118" rx="20" fill="#ffffff" stroke="#d8ded7"/>
+    <text x="842" y="284" fill="#17201d" font-size="22" font-weight="800">GRPO</text>
+    <text x="842" y="316" fill="#56615d" font-size="15">Group-relative policy</text>
+    <text x="842" y="338" fill="#56615d" font-size="15">optimization</text>
+
+    <rect x="812" y="420" width="196" height="130" rx="20" fill="#ffffff" stroke="#d8ded7"/>
+    <text x="842" y="468" fill="#17201d" font-size="22" font-weight="800">Grounded review</text>
+    <text x="842" y="500" fill="#56615d" font-size="15">Quality coverage plus</text>
+    <text x="842" y="522" fill="#56615d" font-size="15">contextual alignment</text>
+  </g>
+  <path d="M910 354 V420" stroke="#1f6f5b" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+  <g font-family="Inter, Arial, sans-serif" font-size="15" fill="#56615d">
+    <text x="486" y="568">Composite reward = quality + figure correspondence + novelty correspondence + format</text>
+  </g>
+</svg>
