@@ -143,6 +143,13 @@ h3 {
   font-size: 1.06rem;
 }
 
+.byline {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -234,6 +241,19 @@ h3 {
 .method-grid p,
 .result-grid p {
   color: var(--muted);
+}
+
+.dataset-link {
+  display: inline-flex;
+  margin-top: 4px;
+  color: var(--teal);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.dataset-link:hover {
+  color: var(--green);
+  text-decoration: underline;
 }
 
 .demo-layout {
@@ -347,6 +367,114 @@ input[type="range"] {
   background: #eef3ef;
 }
 
+.ablation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 32px;
+  margin-top: 30px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.ablation-group h4 {
+  margin: 0 0 14px;
+  font-size: 0.92rem;
+  letter-spacing: 0;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 84px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bar-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--teal);
+}
+
+.bar-value {
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.ablation-note,
+.example-note {
+  max-width: 76ch;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.example-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 34px;
+}
+
+.example-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfbf7;
+}
+
+.example-card.highlight {
+  border-color: var(--green);
+  background: #eef3ef;
+}
+
+.example-card blockquote {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.bibtex-block {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+}
+
+.bibtex-block pre {
+  margin: 0;
+  padding: 22px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #12201b;
+  color: #e8f3ee;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+#copy-bibtex {
+  justify-self: start;
+}
+
 footer {
   display: flex;
   flex-wrap: wrap;
@@ -362,11 +490,29 @@ footer p {
   margin: 0;
 }
 
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.footer-links a {
+  color: var(--green);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .hero,
   .demo-layout,
   .method-grid,
-  .result-grid {
+  .result-grid,
+  .ablation,
+  .example-compare {
     grid-template-columns: 1fr;
   }
 

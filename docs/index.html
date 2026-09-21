@@ -20,6 +20,9 @@
         <a href="#method">Method</a>
         <a href="#demo">Demo</a>
         <a href="#results">Results</a>
+        <a href="#datasets">Datasets</a>
+        <a href="#citation">Citation</a>
+        <a href="https://github.com/sciosci/rem-ctx">Code</a>
         <a href="https://arxiv.org/abs/2604.00248">Paper</a>
       </nav>
     </header>
@@ -37,13 +40,17 @@
             encourage generated reviews to use manuscript figures and external novelty
             assessments accurately.
           </p>
+          <p class="byline">
+            Pawin Taechoyotin &amp; Daniel E. Acuna &middot; Department of Computer Science, University of Colorado Boulder
+          </p>
           <div class="hero-actions">
             <a class="button primary" href="#demo">Try the demo</a>
             <a class="button secondary" href="https://arxiv.org/html/2604.00248">Read HTML paper</a>
+            <a class="button secondary" href="https://github.com/sciosci/rem-ctx">View code</a>
           </div>
         </div>
         <div class="hero-visual" aria-label="REM-CTX pipeline illustration">
-          <img src="./assets/rem-ctx-flow.svg" alt="REM-CTX pipeline from manuscript to auxiliary context, reward functions, GRPO training, and grounded review output.">
+          <img src="./assets/rem-ctx-pipeline.svg" alt="REM-CTX pipeline: a manuscript plus figure and novelty auxiliary context is scored by the quality, figure correspondence, and novelty correspondence reward functions, which drive GRPO training of the review policy.">
         </div>
       </section>
 
@@ -150,24 +157,168 @@
           <article>
             <h3>Highest overall quality</h3>
             <p>
-              Across six baselines, REM-CTX reports the strongest total aspect coverage
-              on manuscripts from computer, biological, and physical sciences.
+              Across six baselines &mdash; prompted and structured Sonnet 4.5, the
+              multi-agent MARG and MAMORX systems, base Qwen3-8B, and the quality-only
+              REMOR &mdash; REM-CTX reports the strongest total aspect coverage on
+              manuscripts from computer, biological, and physical sciences.
             </p>
           </article>
           <article>
             <h3>Complementary rewards</h3>
             <p>
-              Figure and novelty correspondence rewards selectively improve their
-              targeted grounding behavior, and the full model outperforms partial variants.
+              An ablation over four reward configurations shows FCRF clearly drives
+              figure correspondence, while novelty correspondence stays comparably
+              high whether or not NCRF is included &mdash; the two rewards have
+              different degrees of leverage on their respective grounding signals.
             </p>
           </article>
           <article>
             <h3>Interpretable tensions</h3>
             <p>
-              Training dynamics show criticism can trade off against other metrics,
+              During training, the criticism aspect is negatively correlated with
+              novelty correspondence and with several quality dimensions &mdash;
+              importance &amp; relevance, praise, and results &amp; discussion &mdash;
               motivating future grouped or adaptive reward design.
             </p>
           </article>
+        </div>
+
+        <div class="ablation">
+          <div class="ablation-group">
+            <h4>Figure correspondence (FCRF)</h4>
+            <div class="bar-row">
+              <span class="bar-label">Full model</span>
+              <div class="bar"><div class="bar-fill" style="width: 100%"></div></div>
+              <span class="bar-value">0.60</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Novel-only</span>
+              <div class="bar"><div class="bar-fill" style="width: 96.7%"></div></div>
+              <span class="bar-value">0.58</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Fig-only</span>
+              <div class="bar"><div class="bar-fill" style="width: 93.3%"></div></div>
+              <span class="bar-value">0.56</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">None</span>
+              <div class="bar"><div class="bar-fill" style="width: 90%"></div></div>
+              <span class="bar-value">0.54</span>
+            </div>
+          </div>
+          <div class="ablation-group">
+            <h4>Novelty correspondence (NCRF)</h4>
+            <div class="bar-row">
+              <span class="bar-label">Full model</span>
+              <div class="bar"><div class="bar-fill" style="width: 96.6%"></div></div>
+              <span class="bar-value">0.56</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Novel-only</span>
+              <div class="bar"><div class="bar-fill" style="width: 89.7%"></div></div>
+              <span class="bar-value">0.52</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Fig-only</span>
+              <div class="bar"><div class="bar-fill" style="width: 89.7%"></div></div>
+              <span class="bar-value">0.52</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">None</span>
+              <div class="bar"><div class="bar-fill" style="width: 100%"></div></div>
+              <span class="bar-value">0.58</span>
+            </div>
+          </div>
+        </div>
+        <p class="ablation-note">
+          Variants trained for 7 epochs on identical data (Section 5.1). FCRF clearly
+          maximizes figure correspondence (Full: 0.60 vs. None: 0.54). Novelty
+          correspondence is more evenly spread &mdash; the full model (0.56) stays high
+          and comparable to the None variant (0.58) &mdash; suggesting the quality and
+          format rewards alone already elicit novelty-grounded language, with NCRF
+          adding a smaller, more consistent lift over the Fig-only and Novel-only
+          variants. Separately, computer science manuscripts score significantly higher
+          overall than biological sciences (t(208)=3.07, p=.003), with physical
+          sciences in between.
+        </p>
+
+        <div class="example-compare">
+          <div class="example-card">
+            <p class="eyebrow">Qwen3-8B &middot; no correspondence rewards</p>
+            <blockquote>
+              &ldquo;The paper presents a novel approach to multi-modal sentiment
+              analysis by incorporating contextual relationships among utterances
+              using LSTM networks&hellip;&rdquo;
+            </blockquote>
+          </div>
+          <div class="example-card highlight">
+            <p class="eyebrow">REM-CTX</p>
+            <blockquote>
+              &ldquo;The authors propose an LSTM network that models the contextual
+              relationships between utterances in a video for sentiment analysis. The
+              paper is well-written and the proposed model is interesting, but the
+              experimental results are not convincing enough to recommend
+              acceptance.&rdquo;
+            </blockquote>
+          </div>
+        </div>
+        <p class="example-note">
+          Excerpts adapted from the paper's qualitative example. REM-CTX reasons over
+          the auxiliary context before responding, then produces a shorter, more
+          evaluative final review than the ungrounded baseline.
+        </p>
+      </section>
+      <section id="datasets" class="band">
+        <div class="section-heading">
+          <p class="eyebrow">Resources</p>
+          <h2>Datasets released with this work.</h2>
+        </div>
+        <div class="method-grid">
+          <article>
+            <h3>Peer Review with Auxiliary Context</h3>
+            <p>
+              PeerRTEx: 234 full-text manuscripts with paired human reviews &mdash;
+              Computer Science (130), Biological Sciences (80), and Physical Sciences
+              (24) &mdash; drawn from the Transparent Peer Review initiative, ACL
+              Anthology, and NeurIPS.
+            </p>
+            <a class="dataset-link" href="https://huggingface.co/datasets/pawin205/PeerRTEx" target="_blank" rel="noopener">pawin205/PeerRTEx &rarr;</a>
+          </article>
+          <article>
+            <h3>Figure Sentence Correspondence</h3>
+            <p>
+              Sentence-level relevance labels between review text and manuscript
+              figures, used to train the figure correspondence reward (FCRF), which
+              reaches 0.69 weighted-F1.
+            </p>
+            <a class="dataset-link" href="https://huggingface.co/datasets/pawin205/FigSentRelevance" target="_blank" rel="noopener">pawin205/FigSentRelevance &rarr;</a>
+          </article>
+          <article>
+            <h3>Novelty Sentence Correspondence</h3>
+            <p>
+              Sentence-level correspondence between review text and external novelty
+              assessments, used to train the novelty correspondence reward (NCRF),
+              which reaches 0.66 weighted-F1.
+            </p>
+            <a class="dataset-link" href="https://huggingface.co/datasets/pawin205/NoveltySentRelevance" target="_blank" rel="noopener">pawin205/NoveltySentRelevance &rarr;</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="citation" class="band">
+        <div class="section-heading compact">
+          <p class="eyebrow">Cite this work</p>
+          <h2>BibTeX</h2>
+        </div>
+        <div class="bibtex-block">
+          <pre id="bibtex-text">@article{taechoyotin2026remctx,
+  title   = {{REM-CTX}: Automated Peer Review via Reinforcement Learning with Auxiliary Context},
+  author  = {Taechoyotin, Pawin and Acuna, Daniel E.},
+  journal = {arXiv preprint arXiv:2604.00248},
+  year    = {2026}
+}</pre>
+          <button class="button secondary" id="copy-bibtex" type="button">Copy BibTeX</button>
         </div>
       </section>
     </main>
@@ -176,6 +327,11 @@
       <p>
         Demo for <a href="https://arxiv.org/abs/2604.00248">REM-CTX: Automated Peer Review via Reinforcement Learning with Auxiliary Context</a>
         by Pawin Taechoyotin and Daniel E. Acuna.
+      </p>
+      <p class="footer-links">
+        <a href="https://github.com/sciosci/rem-ctx">Code</a>
+        <a href="https://arxiv.org/abs/2604.00248">arXiv</a>
+        <a href="https://huggingface.co/pawin205">Datasets on Hugging Face</a>
       </p>
       <p>This static demo is illustrative and does not run the trained REM-CTX model.</p>
     </footer>

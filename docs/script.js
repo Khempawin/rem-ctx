@@ -70,3 +70,20 @@ Object.values(fields).forEach((field) => {
 });
 
 renderReview();
+
+const copyButton = document.querySelector("#copy-bibtex");
+const bibtexText = document.querySelector("#bibtex-text");
+
+if (copyButton && bibtexText) {
+  copyButton.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(bibtexText.textContent);
+      copyButton.textContent = "Copied!";
+    } catch (err) {
+      copyButton.textContent = "Copy failed";
+    }
+    setTimeout(() => {
+      copyButton.textContent = "Copy BibTeX";
+    }, 1800);
+  });
+}
